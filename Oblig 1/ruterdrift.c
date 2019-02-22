@@ -8,7 +8,7 @@ struct ruter{
     unsigned char ruterID;
     unsigned char FLAGG;
     unsigned char length;
-    char modell[10];
+    char modell[253];
 };
 
 struct ruter* ruter_create(unsigned int count)
@@ -55,19 +55,18 @@ int main(int argc, char **argv){
     //i++;
   //}
 
-   struct ruter* ruters[N];
-   struct ruter* memory = ruter_create(N);
-   int i;
-   for (i = 0; i < N; ++i) {
-   	ruters[i] = memory + i;
-   };
+//   struct ruter* ruters[N];
+//   struct ruter* memory = ruter_create(N);
+//   int i;
+//   for (i = 0; i < N; ++i) {
+//   	ruters[i] = memory + i;
+//   };
 
-   //struct ruter ruter1;
-    struct ruter* ruter1 = ruters[0];
+    struct ruter ruter1;
 
     size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
     fclose(file);
-    printf("%d %d %d %s\n", (*ruter1).ruterID, (*ruter1).FLAGG, (*ruter1).length, (*ruter1).modell);
+    printf("%d %d %d %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
     //free(memory);
 
 //    fread(&ruter1.ruterID, sizeof(ruter1.ruterID), 1, file);
