@@ -41,7 +41,7 @@ int main(int argc, char **argv){
   file = openFile(argv[1]);
 
   size_t read2 = fread(buffer, 4, 4, file); // linje 1
-  N = buffer[0]
+  N = buffer[0];
   printf("%d\n",N);
 
 
