@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="47cd4846-b991-48a8-bfc3-af6777cdbc74" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Oblig 1/ruterdrift.c" beforeDir="false" afterPath="$PROJECT_DIR$/Oblig 1/ruterdrift.c" afterDir="false" />
-    </list>
+    <list default="true" id="47cd4846-b991-48a8-bfc3-af6777cdbc74" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +14,8 @@
       <file leaf-file-name="ruterdrift.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Oblig 1/ruterdrift.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
+            <state relative-caret-position="710">
+              <caret line="110" column="13" selection-start-line="110" selection-start-column="13" selection-end-line="110" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -211,8 +209,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Oblig 1/ruterdrift.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
+        <state relative-caret-position="710">
+          <caret line="110" column="13" selection-start-line="110" selection-start-column="13" selection-end-line="110" selection-end-column="13" />
         </state>
       </provider>
     </entry>
