@@ -8,7 +8,7 @@ struct ruter{
     unsigned char ruterID;
     unsigned char FLAGG;
     unsigned char length;
-    char modell[177];
+    char modell[8];
 };
 
 struct ruter* ruter_create(unsigned int count)
