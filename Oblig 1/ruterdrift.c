@@ -61,11 +61,13 @@ int main(int argc, char **argv){
 //   for (i = 0; i < N; ++i) {
 //   	ruters[i] = memory + i;
 //   };
-    struct ruter ruter1;
+    struct ruter* ruters = malloc(sizeof(struct ruter) * N);
+    struct ruter ruter1 = ruters[0];
+
     size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
     fclose(file);
     printf("%d %d %d %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
-
+    free(ruters);
 
 //    fread(&ruter1.ruterID, sizeof(ruter1.ruterID), 1, file);
 //    fread(&ruter1.FLAGG, sizeof(ruter1.FLAGG), 1, file);
