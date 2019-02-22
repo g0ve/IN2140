@@ -61,7 +61,8 @@ int main(int argc, char **argv){
 //   for (i = 0; i < N; ++i) {
 //   	ruters[i] = memory + i;
 //   };
-    fseek(file, 0, SEEK_END)
+    fseek(file, 0, SEEK_END);
+    printf("%ld", ftell(fp));
     struct ruter ruter1;
 
     size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
