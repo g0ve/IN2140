@@ -68,7 +68,7 @@ int main(int argc, char **argv){
     size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
     fclose(file);
     printf("%d %d %d %s\n", (*ruter1).ruterID, (*ruter1).FLAGG, (*ruter1).length, (*ruter1).modell);
-    free(memory);
+    //free(memory);
 
 //    fread(&ruter1.ruterID, sizeof(ruter1.ruterID), 1, file);
 //    fread(&ruter1.FLAGG, sizeof(ruter1.FLAGG), 1, file);
