@@ -40,28 +40,33 @@ int main(int argc, char **argv){
 
   file = openFile(argv[1]);
 
-  fread(buffer, 4, 4, file); // linje 1
-  N = buffer[0];
-  printf("%d\n",N);
-  int i = 0;
+  //fread(buffer, 4, 4, file); // linje 1
+  //N = buffer[0];
+  ///printf("%d\n",N);
+  //int i = 0;
+
+
   //while (i < N) {
-    size_t read = fread(buffer, 1, 1, file);
-    size_t read2 = fread(buffer, 1, 1, file);
-    char id = buffer[0];
-    size_t read3 = fread(buffer, 1, 1, file);
-    char flagg = buffer[0];
-    printf("ID: %d\n",id );
-    printf("FLAGG: %u\n",flagg );
-    printf("test");
-    i++;
+    //size_t read = fread(buffer, 1, 1, file);
+    //char id = buffer[0];
+    //char flagg = buffer[0];
+    //printf("ID: %d\n",id );
+    //printf("FLAGG: %u\n",flagg );
+    //printf("test");
+    //i++;
   //}
 
-  // struct ruter* ruters[N];
-  // struct ruter* memory = ruter_create(N);
-  // int i;
-  // for (i = 0; i < N; ++i) {
-  // 	ruters[i] = memory + i;
-  // };
+//   struct ruter* ruters[N];
+//   struct ruter* memory = ruter_create(N);
+//   int i;
+//   for (i = 0; i < N; ++i) {
+//   	ruters[i] = memory + i;
+//   };
+
+    struct ruter* ruters = malloc(sizeof(struct ruter) * N);
+    fread(&ruters[0], 255, 1, file);
+    printf("%s", ruters[0].ruterID);
+
 
 
   // struct ruter* ruters = malloc(sizeof(struct ruter) * N);
@@ -103,5 +108,5 @@ int main(int argc, char **argv){
   // }
 
   fclose(file);
-  // free(memory);
+  free(memory);
 }
