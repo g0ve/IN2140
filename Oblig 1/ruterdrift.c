@@ -63,13 +63,13 @@ int main(int argc, char **argv){
 //   	ruters[i] = memory + i;
 //   };
 
-    struct ruter* ruter1 = malloc(sizeof(ruter));
-    fread(&ruter1->ruterID, sizeof(ruter1->ruterID), 1, file);
-    fread(&ruter1->FLAGG, sizeof(ruter1->FLAGG), 1, file);
-    fread(&ruter1->length, sizeof(ruter1->length), 1, file);
-    fread(ruter1->modell, sizeof(ruter1->modell), 1, file);
+    struct ruter* ruters = malloc(sizeof(struct ruter) * 10);
+    fread(&ruters[0]->ruterID, sizeof(ruters[0]->ruterID), 1, file);
+    fread(&ruters[0]->FLAGG, sizeof(ruters[0]->FLAGG), 1, file);
+    fread(&ruters[0]->length, sizeof(ruters[0]->length), 1, file);
+    fread(ruters[0]->modell, sizeof(ruters[0]->modell), 1, file);
 
-    printf("%s %s %s %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
+    printf("%s %s %s %s\n", ruters[0].ruterID, ruters[0].FLAGG, ruters[0].length, ruters[0].modell);
     free(ruter1); /* free whatever you allocated after finished using them */
 
 
