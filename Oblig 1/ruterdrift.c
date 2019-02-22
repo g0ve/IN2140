@@ -44,6 +44,9 @@ int main(int argc, char **argv){
   N = buffer[0];
   printf("%d\n",N);
 
+  size_t read3 = fread(buffer, 3, 4, file);
+  printf("%d %d %d", buffer[0],buffer[1], buffer[2]);
+
 
   //while (i < N) {
     //size_t read = fread(buffer, 1, 1, file);
@@ -63,12 +66,12 @@ int main(int argc, char **argv){
 //   };
 
 
-    struct ruter ruter1;
-
-    size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
-    fclose(file);
-    printf("%d %d %d %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
-    printf("%s", buffer);
+//    struct ruter ruter1;
+//
+//    size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
+//    fclose(file);
+//    printf("%d %d %d %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
+//    printf("%s", buffer);
     //free(memory);
 
 //    fread(&ruter1.ruterID, sizeof(ruter1.ruterID), 1, file);
