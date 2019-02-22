@@ -65,7 +65,7 @@ int main(int argc, char **argv){
 
     struct ruter* ruters = malloc(sizeof(struct ruter) * N);
     fread(&ruters[0], 255, 1, file);
-    printf("%s", ruters[0].ruterID);
+    printf("%d", ruters[0].ruterID);
 
 
 
