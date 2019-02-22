@@ -8,7 +8,7 @@ struct ruter{
     unsigned char ruterID;
     unsigned char FLAGG;
     unsigned char length;
-    char modell[253];
+    char modell[10];
 };
 
 struct ruter* ruter_create(unsigned int count)
@@ -40,10 +40,8 @@ int main(int argc, char **argv){
 
   file = openFile(argv[1]);
 
-  //fread(buffer, 4, 4, file); // linje 1
-  //N = buffer[0];
-  ///printf("%d\n",N);
-  //int i = 0;
+  fread(N, 4, 4, file); // linje 1
+  printf("%d\n",N);
 
 
   //while (i < N) {
@@ -62,14 +60,17 @@ int main(int argc, char **argv){
 //   for (i = 0; i < N; ++i) {
 //   	ruters[i] = memory + i;
 //   };
-
     struct ruter ruter1;
-    fread(&ruter1.ruterID, sizeof(ruter1.ruterID), 1, file);
-    fread(&ruter1.FLAGG, sizeof(ruter1.FLAGG), 1, file);
-    fread(&ruter1.length, sizeof(ruter1.length), 1, file);
-    fread(ruter1.modell, sizeof(ruter1.modell), 1, file);
-
+    size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
+    fclose(file);
     printf("%s %s %s %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
+
+//    fread(&ruter1.ruterID, sizeof(ruter1.ruterID), 1, file);
+//    fread(&ruter1.FLAGG, sizeof(ruter1.FLAGG), 1, file);
+//    fread(&ruter1.length, sizeof(ruter1.length), 1, file);
+//    fread(ruter1.modell, sizeof(ruter1.modell), 1, file);
+//
+//    printf("%s %s %s %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
 
 
   // struct ruter* ruters = malloc(sizeof(struct ruter) * N);
