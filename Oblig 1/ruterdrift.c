@@ -40,9 +40,9 @@ int main(int argc, char **argv){
 
   file = openFile(argv[1]);
 
-  size_t read2 = fread(buffer, 4, 4, file); // linje 1
-  N = buffer[0];
-  printf("%d\n",N);
+//  size_t read2 = fread(buffer, 4, 4, file); // linje 1
+//  N = buffer[0];
+//  printf("%d\n",N);
 
 
   //while (i < N) {
@@ -63,12 +63,9 @@ int main(int argc, char **argv){
 //   };
 
 
-    fseek(file, 0, SEEK_END);
-    printf("%ld", ftell(file));
     struct ruter ruter1;
 
     size_t read = fread((void*)&ruter1, sizeof(struct ruter), 1, file);
-   size_t read3 = fread(buffer, 256, 1, file);
     fclose(file);
     printf("%d %d %d %s\n", ruter1.ruterID, ruter1.FLAGG, ruter1.length, ruter1.modell);
     printf("%s", buffer);
