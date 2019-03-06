@@ -5,8 +5,8 @@ BINARIES = ruterdrift
 
 all: $(BINARIES)
 
-ruterdrift: ruterdrift.c
-	$(CC) $(CFLAGS) ruterdrift.c -o ruterdrift
+ruterdrift: ruterdrift.c binoper.c
+	$(CC) $(CFLAGS) ruterdrift.c binoper.c -o ruterdrift
 
 clean:
 	rm -f $(BINARIES)
