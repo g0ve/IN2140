@@ -152,6 +152,8 @@ int main(int argc, char **argv){
       id2 = strtol(tmpId2, NULL, 10);
 
       if (id == id2){
+        printf("%d\n", id );
+        printf("%d\n", id2 );
         printf("Det er den samme ruteren...\n");
       }
 
