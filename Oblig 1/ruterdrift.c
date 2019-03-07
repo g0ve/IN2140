@@ -150,10 +150,10 @@ int main(int argc, char **argv){
       char tmpId2[1];
       fscanf(fileCommands, "%s", tmpId2);
       id2 = strtol(tmpId2, NULL, 10);
+      printf("%d\n", id );
+      printf("%d\n", id2 );
 
       if (id == id2){
-        printf("%d\n", id );
-        printf("%d\n", id2 );
         printf("Det er den samme ruteren...\n");
       }
 
