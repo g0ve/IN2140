@@ -8,16 +8,6 @@
 #define FEIL_INNLESNING "Feil innlesning. Ble ikke lest"
 #define MAX_CHILDREN 10
 
-struct ruter{
-  unsigned char ruterID;
-  unsigned char FLAGG;
-  unsigned char length;
-  char modell[253];
-
-  int visited;
-  int number_of_children;
-  struct ruter* koblinger[MAX_CHILDREN];
-};
 //Global dobbelt peker som har oversikt over alle structene
 struct ruter** alleRutere;
 
@@ -29,6 +19,18 @@ FILE* fileCommands;
 char tmpBuffer[255];
 //Buffer som brukes av fread gjennom koden. Her legger jeg all info om hver struct
 char fread_buffer[255];
+
+struct ruter{
+  unsigned char ruterID;
+  unsigned char FLAGG;
+  unsigned char length;
+  char modell[253];
+
+  int visited;
+
+  int number_of_children;
+  struct ruter* koblinger[MAX_CHILDREN];
+};
 
 //-----------------------------------------------------------------------------
 //fileName - filnavet som skal åpnes og leses av
@@ -68,6 +70,20 @@ int main(int argc, char **argv){
   number_of_ruters();
 
   alleRutere = malloc(sizeof(struct ruter*) * N);
+
+
+	// struct ruter* memory = ruter_create(N);
+  //
+  // alleRutere = &memory;
+
+  //
+  // struct ruter* lstRuter[N];
+  // struct ruter* memory = ruter_create(N);
+  // for (int i = 0; i < N; ++i) {
+  //   lstRuter[i] = memory + i;
+  // };
+  // alleRutere = &memory;
+
 
   if( alleRutere == NULL ){
     printf("FEIL med allokering\n");
@@ -167,8 +183,7 @@ int main(int argc, char **argv){
       //   printf("Fant ikke rute mellom: %d og %d\n", id, id2);
       // }
     }
-  };
-
+  }
   skrivTilFil();
   fclose(fileCommands);
   fclose(fileInfo);
@@ -177,8 +192,8 @@ int main(int argc, char **argv){
   }
   free(alleRutere);
 }
-
 //----------------------------------------------------------------------------
+
 //-------------------------------ÅPNER FIL-------------------------------------
 //Denne funksjonen åpner filen det skal leses av
 FILE* openFile(char* fileName){

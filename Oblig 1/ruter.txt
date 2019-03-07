@@ -8,4 +8,3 @@
 7 66 11 Netgear i8
 8 197 11 Linksys u6
 9 242 10 D-Link p6
-9 242 10 D-Lin1
