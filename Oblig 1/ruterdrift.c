@@ -148,6 +148,7 @@ int main(int argc, char **argv){
   for (i = 0; i < N; i++) {
     free(alleRutere[i]);
   }
+
   free(alleRutere);
 }
 
@@ -338,96 +339,90 @@ void slett_ruter(int slettId){
     for(int i = slettId + 1; i < N; i++){
       alleRutere[i-1] = alleRutere[i];
     }
-
+    N--;
     // for(int i = 0; i < N; ++i){
-      //   printf("EN: %u\n", alleRutere + i);
+    //   printf("EN: %u\n", alleRutere + i);
+    // }
+    // printf("%d\n", N);
+    // for (int x = 0; x < N; x++) {
+      //   alleRutere[x] = realloc(alleRutere[x], sizeof(struct ruter));
       // }
-
-      N--;
-      // printf("%d\n", N);
-      // for (int x = 0; x < N; x++) {
-        //   alleRutere[x] = realloc(alleRutere[x], sizeof(struct ruter));
+      //
+      // alleRutere = (struct ruter**) realloc(alleRutere, N-1 * sizeof(struct ruter*));
+      // for(int e = 0; e < N+1; ++e){
+        //   printf("%u\n", alleRutere + e);
         // }
-        //
-        // alleRutere = (struct ruter**) realloc(alleRutere, N-1 * sizeof(struct ruter*));
-        // for(int e = 0; e < N+1; ++e){
-          //   printf("%u\n", alleRutere + e);
+        // printf("%d\n", alleRutere[8]->ruterID);
+        // printf("%ld\n", sizeof(tmpMemory));
+        // for (int i = 0; i < N-1; i++) {
+          //   tmpMemory[i] = alleRutere[i];
           // }
-          // printf("%d\n", alleRutere[8]->ruterID);
-          // printf("%ld\n", sizeof(tmpMemory));
-          // for (int i = 0; i < N-1; i++) {
-            //   tmpMemory[i] = alleRutere[i];
-            // }
-            // alleRutere = &tmpMemory;
-            // free(alleRutere[8]);
-            // printf("%ld\n", sizeof(alleRutere));
-          }
-          // free(alleRutere[N]);
+    // alleRutere = &tmpMemory;
+    // free(alleRutere[8]);
+    // printf("%ld\n", sizeof(alleRutere));
+  }
+}
+//------------------------------------------------------------------------------
+//-------------------------FINNES RUTE VEI------------------------------------
+//Ser om den kan finne en vei til rute
+void finnes_rute(int finnvei){
+  if(alleRutere[finnvei]-> visited != 1){
+    alleRutere[finnvei] -> visited = 1;
+    int ant = alleRutere[finnvei] -> antall_koblinger;
+    // printf("ANTALL: %d\n", ant);
 
-        }
-        //------------------------------------------------------------------------------
+    for(int i = 0; i < ant-1; i++){
+      int neste = alleRutere[finnvei]->koblinger[i]->ruterID;
+      finnes_rute(neste);
+    }
+  }
+}
+//---------------------------------------------------------------------------
 
+//---------------------------------SKRIVER TIL FIL---------------------------
+//Skriver all info om hver rute til en fil leselig (ikke byte)
+void skrivTilFil(){
+  FILE *fileSkriv = fopen("ruter.txt", "w+");
+  if (fileSkriv == NULL) {
+    printf("Fant ikke fil\n");
+    exit(EXIT_FAILURE);
+  };
 
-        //-------------------------FINNES RUTE VEI------------------------------------
-        //Ser om den kan finne en vei til rute
-        void finnes_rute(int finnvei){
-          if(alleRutere[finnvei]-> visited != 1){
-            alleRutere[finnvei] -> visited = 1;
-            int ant = alleRutere[finnvei] -> antall_koblinger;
-            // printf("ANTALL: %d\n", ant);
+  // size_t written4 = fwrite(&N, 1, 4, fileSkriv);
+  // size_t written3 = fwrite("\n", sizeof(char), 1, fileSkriv);
 
-            for(int i = 0; i < ant-1; i++){
-              int neste = alleRutere[finnvei]->koblinger[i]->ruterID;
-              finnes_rute(neste);
-            }
-          }
-        }
-        //---------------------------------------------------------------------------
+  int skriver = 0;
+  while (skriver < N) {
+    // int navnLen = alleRutere[skriver] -> length;
+    //
+    // size_t written6 = fwrite(alleRutere[skriver], 3 + navnLen, 1, fileSkriv);
+    // size_t written7 = fwrite("\n", sizeof(char), 1, fileSkriv);
 
-        //---------------------------------SKRIVER TIL FIL---------------------------
-        //Skriver all info om hver rute til en fil leselig (ikke byte)
-        void skrivTilFil(){
-          FILE *fileSkriv = fopen("ruter.txt", "w+");
-          if (fileSkriv == NULL) {
-            printf("Fant ikke fil\n");
-            exit(EXIT_FAILURE);
-          };
+    /*Koden som er kommentert ut under er koden som skriver til filen med data som er
+    lesbart
+    */
+    fprintf(fileSkriv, "\n%d %u %d %s",
+    alleRutere[skriver] -> ruterID,
+    alleRutere[skriver] -> FLAGG,
+    alleRutere[skriver] -> length,
+    alleRutere[skriver] -> modell);
 
-          // size_t written4 = fwrite(&N, 1, 4, fileSkriv);
-          // size_t written3 = fwrite("\n", sizeof(char), 1, fileSkriv);
+    skriver++;
+  }
 
-          int skriver = 0;
-          while (skriver < N) {
-            // int navnLen = alleRutere[skriver] -> length;
-            //
-            // size_t written6 = fwrite(alleRutere[skriver], 3 + navnLen, 1, fileSkriv);
-            // size_t written7 = fwrite("\n", sizeof(char), 1, fileSkriv);
-
-            /*Koden som er kommentert ut under er koden som skriver til filen med data som er
-            lesbart
-            */
-            fprintf(fileSkriv, "\n%d %u %d %s",
-            alleRutere[skriver] -> ruterID,
-            alleRutere[skriver] -> FLAGG,
-            alleRutere[skriver] -> length,
-            alleRutere[skriver] -> modell);
-
-            skriver++;
-          }
-
-          // int e;
-          // for (e = 0; e < N; e++) {
-            //   int i;
-            //   for (i = 0; i < alleRutere[e]->antall_koblinger; i++) {
-              //     char bufferKobling[2];
-              //     bufferKobling[0] = alleRutere[e]->ruterID;
-              //     bufferKobling[1] = alleRutere[e]->koblinger[i]->ruterID;
-              //
-              //     size_t written8 = fwrite(bufferKobling, sizeof(bufferKobling), 1, fileSkriv);
-              //     size_t written9 = fwrite("\n", sizeof(char), 1, fileSkriv);
-              //   }
-              // }
-              fclose(fileSkriv);
-            }
-            //---------------------------------------------------------------------------
+  // int e;
+  // for (e = 0; e < N; e++) {
+    //   int i;
+    //   for (i = 0; i < alleRutere[e]->antall_koblinger; i++) {
+      //     char bufferKobling[2];
+      //     bufferKobling[0] = alleRutere[e]->ruterID;
+      //     bufferKobling[1] = alleRutere[e]->koblinger[i]->ruterID;
+      //
+      //     size_t written8 = fwrite(bufferKobling, sizeof(bufferKobling), 1, fileSkriv);
+      //     size_t written9 = fwrite("\n", sizeof(char), 1, fileSkriv);
+      //   }
+      // }
+      fclose(fileSkriv);
+    }
+//---------------------------------------------------------------------------
 //----------------------------------------------------------------------------
