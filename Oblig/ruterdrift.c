@@ -43,7 +43,7 @@ void printRuter(int id);
 //id - id til ruteren som skal endres
 //idFlagg er id til flagger 0,1,2 eller 4
 //bytt - er hva biten til flaget skal endres til 0-15
-void sett_flag(int id, int idFlagg, unsigned char bytt);
+void sett_flag(int id, int idFlagg, int bytt);
 //id - id til ruter osm skal endres navn
 //name - det nye navnet som skal bli byttet til
 void sett_modell(int id, char* name);
@@ -96,39 +96,40 @@ int main(int argc, char **argv){
     int id;
     int id2;
     int flaggId;
+    int flaggVerdi;
     char command[20];
 
     fscanf(fileCommands, "%s", command);
 
     //HVIS DEN VIL PRINTE
     if (strcmp("print", command) == 0) {
-      char tmpId[1];
-      fscanf(fileCommands, "%s", tmpId);
-      id = strtol(tmpId, NULL, 10);
-
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      id = strtol(tmpId1, NULL, 10);
       printRuter(id);
     }
 
     //HVIS DEN VIL ENDRE FLAGG
     if(strcmp("sett_flag", command) == 0){
-      char tmpId[1];
-      fscanf(fileCommands, "%s", tmpId);
-      id = strtol(tmpId, NULL, 10);
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      id = strtol(tmpId1, NULL, 10);
 
       char tmpFlaggId[1];
       fscanf(fileCommands, "%s", tmpFlaggId);
       flaggId = strtol(tmpFlaggId, NULL, 10);
 
-      unsigned char tmpBytt[1];
-      fscanf(fileCommands, "%s", tmpBytt);
+      char tmpByttVerdi[1];
+      fscanf(fileCommands, "%s", tmpByttVerdi);
+      flaggVerdi = strtol(tmpByttVerdi, NULL, 10);
 
-      sett_flag(id, flaggId, tmpBytt[0]);
+      sett_flag(id, flaggId, flaggVerdi);
     }
 
     if(strcmp("sett_modell", command) == 0){
-      char tmpId[1];
-      fscanf(fileCommands, "%s", tmpId);
-      id = strtol(tmpId, NULL, 10);
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      id = strtol(tmpId1, NULL, 10);
 
       char tmpModell[253];
       fscanf(fileCommands, "%[^\n]", tmpModell);
@@ -170,7 +171,6 @@ int main(int argc, char **argv){
       for (int i = 0; i < N; i++){
         alleRutere[i] -> visited = 0;
       }
-
       finnes_rute(id);
 
       // if(alleRutere[id2] -> visited == 1){
@@ -180,9 +180,11 @@ int main(int argc, char **argv){
       // }
     }
   }
+
   skrivTilFil();
   fclose(fileCommands);
   fclose(fileInfo);
+
   for (int i = 0; i < N; i++) {
     free(alleRutere[i]);
   }
@@ -289,10 +291,8 @@ void printRuter(int id){
 
 //-------------------------SETT FLAGG-------------------------------------------
 //Endrer flagget til en ruter, med bit opersajoner
-void sett_flag(int id, int idFlagg, unsigned char bytt){
+void sett_flag(int id, int idFlagg, int bytt){
   byte_t tmpFlagg = alleRutere[id] -> FLAGG;
-  // printf("FÅR INN: ");
-  // print_binary(tmpFlagg);
 
   if(idFlagg == 0 || idFlagg == 1 || idFlagg == 2){
     if(GET_BIT_N(tmpFlagg, idFlagg) != bytt){
@@ -324,8 +324,6 @@ void sett_flag(int id, int idFlagg, unsigned char bytt){
 
 
   }
-  // printf("FERDIG:");
-  // print_binary(tmpFlagg);
   alleRutere[id] -> FLAGG = tmpFlagg;
 }
 //-----------------------------------------------------------------------------
@@ -378,12 +376,7 @@ void slett_ruter(int slettId){
       alleRutere[i-1] = alleRutere[i];
     }
 
-    // for(int i = 0; i < N; ++i){
-    //   printf("EN: %u\n", alleRutere + i);
-    // }
-
     N--;
-    // printf("%d\n", N);
     // for (int x = 0; x < N; x++) {
     //   alleRutere[x] = realloc(alleRutere[x], sizeof(struct ruter));
     // }
@@ -401,8 +394,6 @@ void slett_ruter(int slettId){
     // free(alleRutere[8]);
     // printf("%ld\n", sizeof(alleRutere));
   }
-  // free(alleRutere[N]);
-
 }
 //------------------------------------------------------------------------------
 
@@ -410,12 +401,14 @@ void slett_ruter(int slettId){
 //-------------------------FINNES RUTE VEI------------------------------------
 //Ser om den kan finne en vei til rute
 void finnes_rute(int finnvei){
+  // printf("FINN VEI FRA: %d\n", finnvei);
   if(alleRutere[finnvei]-> visited != 1){
+    // printf("Ruter %d var ikke besøkt, men er det NÅ\n", alleRutere[finnvei]->ruterID);
     alleRutere[finnvei] -> visited = 1;
     int ant = alleRutere[finnvei] -> number_of_children;
     // printf("ANTALL: %d\n", ant);
 
-    for(int i = 0; i < ant-1; i++){
+    for(int i = 0; i < ant; i++){
       int neste = alleRutere[finnvei]->koblinger[i]->ruterID;
       finnes_rute(neste);
     }
