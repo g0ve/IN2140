@@ -31,132 +31,28 @@ char tmpBuffer[255];
 char fread_buffer[255];
 
 //-----------------------------------------------------------------------------
-//fileName - filnavet som skal åpnes og leses av
-FILE* openFile(char* fileName);
-void number_of_ruters();
-void writeRuters();
-void connectRuters();
-//id - id til ruteren som vil bli skrevet ut
-void printRuter(int id);
-//id - id til ruteren som skal endres
-//idFlagg er id til flagger 0,1,2 eller 4
-//bytt - er hva biten til flaget skal endres til 0-15
-void sett_flag(int id, int idFlagg, unsigned char bytt);
-//id - id til ruter osm skal endres navn
-//name - det nye navnet som skal bli byttet til
-void sett_modell(int id, char* name);
-//id - iden til ruteren som skal få en ny kobling
-//id2 - iden til ruteren som skal bli koblet til id
-void legg_til_kobling(int id, int id2);
-//slettId er iden til ruteren som skal slettes
-void slett_ruter(int slettId);
-void finnes_rute();
-void skrivTilFil();
+// //fileName - filnavet som skal åpnes og leses av
+// FILE* openFile(char* fileName);
+// void number_of_ruters();
+// void writeRuters();
+// void connectRuters();
+// //id - id til ruteren som vil bli skrevet ut
+// void printRuter(int id);
+// //id - id til ruteren som skal endres
+// //idFlagg er id til flagger 0,1,2 eller 4
+// //bytt - er hva biten til flaget skal endres til 0-15
+// void sett_flag(int id, int idFlagg, unsigned char bytt);
+// //id - id til ruter osm skal endres navn
+// //name - det nye navnet som skal bli byttet til
+// void sett_modell(int id, char* name);
+// //id - iden til ruteren som skal få en ny kobling
+// //id2 - iden til ruteren som skal bli koblet til id
+// void legg_til_kobling(int id, int id2);
+// //slettId er iden til ruteren som skal slettes
+// void slett_ruter(int slettId);
+// void finnes_rute();
+// void skrivTilFil();
 //-----------------------------------------------------------------------------
-//--------------------------MAIN-----------------------------------------------
-int main(int argc, char **argv){
-  if(argc != 3){
-    printf("Legg til fil navn som argument\n");
-    exit(EXIT_FAILURE);
-  }
-
-  for (int p = 0; p < 3; p++) {
-    printf("MOHAHAH\n");
-  }
-  //Åpner filene som skal leses fra
-  fileInfo = openFile(argv[1]);
-  fileCommands = openFile(argv[2]);
-  //Leser av fil om hvor mange rutere det er
-  number_of_ruters();
-  //Allokerer nok minne til peker som skal holde oversikt over alle structene
-  alleRutere = malloc(sizeof(struct ruter*) * N);
-  if( alleRutere == NULL ){
-    printf("FEIL med allokering\n");
-  }
-  //Leser structs fra fil og skriver+allokerer structene
-  writeRuters();
-  connectRuters();
-// //------------------------------------------------------------------------------
-printf("HELLO\n");
-  while(!feof(fileCommands)){
-    int kommandoId; //Hvis det er en id involvert i kommanoden, er dette den første id'en
-    int kommandoId2; //Hvis der er 2 id'er involvert i kommandoen, er dette den andre
-    int kommandoFlaggId;
-    char command[20];
-    //Leser inn den første stringen som sier noe om hvilken kommando det er
-    fscanf(fileCommands, "%s", command);
-    //I hver kommando er det en id etter selve kommandoen derfor henter jeg iden her
-    char tmpId1[1];
-    fscanf(fileCommands, "%s", tmpId1);
-    kommandoId = strtol(tmpId1, NULL, 10); //Kan sikkert bruke vanlig casting(sikkert enkelere), men dette funket
-    //---------------------------------------------------------------------------------------------
-    //HVIS DEN VIL PRINTE
-    if (strcmp("print", command) == 0) {
-      printf("HELLO2\n");
-      printRuter(kommandoId);
-    }
-    //HVIS DEN VIL ENDRE FLAGG
-    if(strcmp("sett_flag", command) == 0){
-      char tmpFlaggId[1];
-      fscanf(fileCommands, "%s", tmpFlaggId);
-      kommandoFlaggId = strtol(tmpFlaggId, NULL, 10);
-      //Henter inn hvilket tall som skal byttes til 0-15
-      unsigned char tmpBytt[1];
-      fscanf(fileCommands, "%s", tmpBytt);
-      //Kjører funksjon for å endre flagget
-      sett_flag(kommandoId, kommandoFlaggId, tmpBytt[0]);
-    }
-    //Sjekker om kommando er "sett_modell" og kjører så funksojnen for å endre navn
-    if(strcmp("sett_modell", command) == 0){
-      char tmpModell[253];
-      fscanf(fileCommands, "%[^\n]", tmpModell);
-      char* modell;
-      strtol(tmpModell, &modell, 3);
-      //Kjører fuksjon for å endre modell navn
-      sett_modell(kommandoId, modell);
-    }
-    //Sjekker om kommando er "legg_til_kobling" og kjører sp den funksjonen
-    if(strcmp("legg_til_kobling", command) == 0){
-      char tmpId2[1];
-      fscanf(fileCommands, "%s", tmpId2);
-      kommandoId2 = strtol(tmpId2, NULL, 10);
-      //Kjører funksjon
-      legg_til_kobling(kommandoId, kommandoId2);
-    }
-    //Sjekker om kommanod er "slett_ruter" og kjører den funksjonen
-    if(strcmp("slett_router", command) == 0){
-      slett_ruter(kommandoId);
-    }
-    //Sjekker om kommando er "finnes_rute" og kjører den
-    if(strcmp("finnes_rute", command) == 0){
-      char tmpId2[1];
-      fscanf(fileCommands, "%s", tmpId2);
-      kommandoId2 = strtol(tmpId2, NULL, 10);
-      //Går igjennom alle rutere og setter besøkt til 0 (false)
-      int i;
-      for (i = 0; i < N; i++){
-        alleRutere[i] -> visited = 0;
-      }
-      //Kjører funksjon
-      finnes_rute(kommandoId);
-      // if(alleRutere[id2] -> visited == 1){
-      //   printf("Rute mellom rute: %d og rute: %d finnes.\n", id, id2);
-      // }else{
-      //   printf("Fant ikke rute mellom: %d og %d\n", id, id2);
-      // }
-    }
-  }
-
-  skrivTilFil();
-  fclose(fileCommands);
-  fclose(fileInfo);
-  int i;
-  for (i = 0; i < N; i++) {
-    free(alleRutere[i]);
-  }
-
-  free(alleRutere);
-}
 
 //-------------------------------ÅPNER FIL-------------------------------------
 //Denne funksjonen åpner filen det skal leses av
@@ -432,3 +328,107 @@ void skrivTilFil(){
     }
 //---------------------------------------------------------------------------
 //----------------------------------------------------------------------------
+//--------------------------MAIN-----------------------------------------------
+int main(int argc, char **argv){
+if(argc != 3){
+printf("Legg til fil navn som argument\n");
+exit(EXIT_FAILURE);
+}
+
+for (int p = 0; p < 3; p++) {
+printf("MOHAHAH\n");
+}
+//Åpner filene som skal leses fra
+fileInfo = openFile(argv[1]);
+fileCommands = openFile(argv[2]);
+//Leser av fil om hvor mange rutere det er
+number_of_ruters();
+//Allokerer nok minne til peker som skal holde oversikt over alle structene
+alleRutere = malloc(sizeof(struct ruter*) * N);
+if( alleRutere == NULL ){
+printf("FEIL med allokering\n");
+}
+//Leser structs fra fil og skriver+allokerer structene
+writeRuters();
+connectRuters();
+// //------------------------------------------------------------------------------
+printf("HELLO\n");
+while(!feof(fileCommands)){
+int kommandoId; //Hvis det er en id involvert i kommanoden, er dette den første id'en
+int kommandoId2; //Hvis der er 2 id'er involvert i kommandoen, er dette den andre
+int kommandoFlaggId;
+char command[20];
+//Leser inn den første stringen som sier noe om hvilken kommando det er
+fscanf(fileCommands, "%s", command);
+//I hver kommando er det en id etter selve kommandoen derfor henter jeg iden her
+char tmpId1[1];
+fscanf(fileCommands, "%s", tmpId1);
+kommandoId = strtol(tmpId1, NULL, 10); //Kan sikkert bruke vanlig casting(sikkert enkelere), men dette funket
+//---------------------------------------------------------------------------------------------
+//HVIS DEN VIL PRINTE
+if (strcmp("print", command) == 0) {
+printf("HELLO2\n");
+printRuter(kommandoId);
+}
+//HVIS DEN VIL ENDRE FLAGG
+if(strcmp("sett_flag", command) == 0){
+char tmpFlaggId[1];
+fscanf(fileCommands, "%s", tmpFlaggId);
+kommandoFlaggId = strtol(tmpFlaggId, NULL, 10);
+//Henter inn hvilket tall som skal byttes til 0-15
+unsigned char tmpBytt[1];
+fscanf(fileCommands, "%s", tmpBytt);
+//Kjører funksjon for å endre flagget
+sett_flag(kommandoId, kommandoFlaggId, tmpBytt[0]);
+}
+//Sjekker om kommando er "sett_modell" og kjører så funksojnen for å endre navn
+if(strcmp("sett_modell", command) == 0){
+char tmpModell[253];
+fscanf(fileCommands, "%[^\n]", tmpModell);
+char* modell;
+strtol(tmpModell, &modell, 3);
+//Kjører fuksjon for å endre modell navn
+sett_modell(kommandoId, modell);
+}
+//Sjekker om kommando er "legg_til_kobling" og kjører sp den funksjonen
+if(strcmp("legg_til_kobling", command) == 0){
+char tmpId2[1];
+fscanf(fileCommands, "%s", tmpId2);
+kommandoId2 = strtol(tmpId2, NULL, 10);
+//Kjører funksjon
+legg_til_kobling(kommandoId, kommandoId2);
+}
+//Sjekker om kommanod er "slett_ruter" og kjører den funksjonen
+if(strcmp("slett_router", command) == 0){
+slett_ruter(kommandoId);
+}
+//Sjekker om kommando er "finnes_rute" og kjører den
+if(strcmp("finnes_rute", command) == 0){
+char tmpId2[1];
+fscanf(fileCommands, "%s", tmpId2);
+kommandoId2 = strtol(tmpId2, NULL, 10);
+//Går igjennom alle rutere og setter besøkt til 0 (false)
+int i;
+for (i = 0; i < N; i++){
+alleRutere[i] -> visited = 0;
+}
+//Kjører funksjon
+finnes_rute(kommandoId);
+// if(alleRutere[id2] -> visited == 1){
+//   printf("Rute mellom rute: %d og rute: %d finnes.\n", id, id2);
+// }else{
+//   printf("Fant ikke rute mellom: %d og %d\n", id, id2);
+// }
+}
+}
+
+skrivTilFil();
+fclose(fileCommands);
+fclose(fileInfo);
+int i;
+for (i = 0; i < N; i++) {
+free(alleRutere[i]);
+}
+
+free(alleRutere);
+}
