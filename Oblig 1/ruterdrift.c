@@ -59,6 +59,10 @@ int main(int argc, char **argv){
     printf("Legg til fil navn som argument\n");
     exit(EXIT_FAILURE);
   }
+
+  for (int p = 0; p < 3; p++) {
+    printf("MOHAHAH\n");
+  }
   //Åpner filene som skal leses fra
   fileInfo = openFile(argv[1]);
   fileCommands = openFile(argv[2]);
