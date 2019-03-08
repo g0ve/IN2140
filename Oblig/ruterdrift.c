@@ -79,7 +79,6 @@ int main(int argc, char **argv){
 // //------------------------------------------------------------------------------
 printf("HELLO\n");
   while(!feof(fileCommands)){
-    printf("HELLO2\n");
     int kommandoId; //Hvis det er en id involvert i kommanoden, er dette den første id'en
     int kommandoId2; //Hvis der er 2 id'er involvert i kommandoen, er dette den andre
     int kommandoFlaggId;
@@ -93,6 +92,7 @@ printf("HELLO\n");
     //---------------------------------------------------------------------------------------------
     //HVIS DEN VIL PRINTE
     if (strcmp("print", command) == 0) {
+      printf("HELLO2\n");
       printRuter(kommandoId);
     }
     //HVIS DEN VIL ENDRE FLAGG
