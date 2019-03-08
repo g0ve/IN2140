@@ -382,7 +382,7 @@ void finnes_rute(int finnvei){
 //---------------------------------SKRIVER TIL FIL---------------------------
 //Skriver all info om hver rute til en fil leselig (ikke byte)
 void skrivTilFil(){
-  FILE *fileSkriv = fopen("ruter.txt", "w+");
+  FILE *fileSkriv = fopen("ruter", "w+");
   if (fileSkriv == NULL) {
     printf("Fant ikke fil\n");
     exit(EXIT_FAILURE);
