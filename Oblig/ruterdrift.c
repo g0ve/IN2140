@@ -31,10 +31,10 @@ struct ruter{
   int number_of_children;
   struct ruter* koblinger[MAX_CHILDREN];
 };
-
 //-----------------------------------------------------------------------------
 //fileName - filnavet som skal åpnes og leses av
 FILE* openFile(char* fileName);
+//Leser og finner antall ruter
 void number_of_ruters();
 void writeRuters();
 void connectRuters();
@@ -66,125 +66,104 @@ int main(int argc, char **argv){
   fileInfo = openFile(argv[1]);
   fileCommands = openFile(argv[2]);
 
-
   number_of_ruters();
-
+  //Her allokerer jeg minne til dobbelt pekeren min som skal holde oversikt over alle structene
   alleRutere = malloc(sizeof(struct ruter*) * N);
-
-
-	// struct ruter* memory = ruter_create(N);
-  //
-  // alleRutere = &memory;
-
-  //
-  // struct ruter* lstRuter[N];
-  // struct ruter* memory = ruter_create(N);
-  // for (int i = 0; i < N; ++i) {
-  //   lstRuter[i] = memory + i;
-  // };
-  // alleRutere = &memory;
-
-
   if( alleRutere == NULL ){
     printf("FEIL med allokering\n");
   }
-
+  //Her kaller jeg funksjon "writeRuters". Den leser inn fra fil of skriver info til struct
   writeRuters();
+  //Her kaller jeg funksjon "connectRuters". Den fortsetter å lese av fil og legger inn koblinger mellom rutere
   connectRuters();
-// //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+/*I denne while løkken kjører jeg igjennom filen med alle kommandoene som skal utføres.
+Den leser inn første ord i hver linje, og sjekker så med if setninger hvilken kommando som skal utføres.
+Treffer en av dem blir resten av info fra linjen hentet inn (rute-id osv.).
+Det blir så sendt med videre til en egen funksjon som gjør oppgaven kommandoen ville.*/
   while(!feof(fileCommands)){
-    int id;
-    int id2;
-    int flaggId;
-    int flaggVerdi;
-    char command[20];
+    int kommandoId; //Første rute-ID fra kommando linja
+    int kommandoId2; //Andre rute-ID fra kommando linja
+    int kommandoFlaggId; //ID'en til flagget som skal endres fra kommando linja (0,1,2,4)
+    int kommandoFlaggVerdi; //Verdien som skal bli byttet til
+    char command[20]; //Buffer som kommandoen som skal bli kjørt legges inn i
 
-    fscanf(fileCommands, "%s", command);
+    fscanf(fileCommands, "%s", command); //Leser inn forste ordet fra linja (kommandoen)
+
+    /*Avsnittet under bruker jeg i alle if setningene bare at alle henter ulik info,
+    og tilslutt sender det til funksjonen*/
+    char tmpId1[1]; //Buffer for å legge inn id som kommer etter kommandoen
+    fscanf(fileCommands, "%s", tmpId1); //Leser inn rute-ID fra linja som alle har
+    kommandoId = strtol(tmpId1, NULL, 10); //Gjør den om til int (kunne sikkert brukt vanlig casting menmen)
 
     //HVIS DEN VIL PRINTE
     if (strcmp("print", command) == 0) {
-      char tmpId1[1];
-      fscanf(fileCommands, "%s", tmpId1);
-      id = strtol(tmpId1, NULL, 10);
-      printRuter(id);
+      printRuter(kommandoId);
     }
 
     //HVIS DEN VIL ENDRE FLAGG
-    if(strcmp("sett_flag", command) == 0){
-      char tmpId1[1];
-      fscanf(fileCommands, "%s", tmpId1);
-      id = strtol(tmpId1, NULL, 10);
-
+    else if(strcmp("sett_flag", command) == 0){
       char tmpFlaggId[1];
       fscanf(fileCommands, "%s", tmpFlaggId);
-      flaggId = strtol(tmpFlaggId, NULL, 10);
+      kommandoFlaggId = strtol(tmpFlaggId, NULL, 10);
 
       char tmpByttVerdi[1];
       fscanf(fileCommands, "%s", tmpByttVerdi);
-      flaggVerdi = strtol(tmpByttVerdi, NULL, 10);
+      kommandoFlaggVerdi = strtol(tmpByttVerdi, NULL, 10);
 
-      sett_flag(id, flaggId, flaggVerdi);
+      sett_flag(kommandoId, kommandoFlaggId, kommandoFlaggVerdi);
     }
-
-    if(strcmp("sett_modell", command) == 0){
-      char tmpId1[1];
-      fscanf(fileCommands, "%s", tmpId1);
-      id = strtol(tmpId1, NULL, 10);
-
+    //HVIS DEN VIL ENDRE NAVN PÅ MODELL
+    else if(strcmp("sett_modell", command) == 0){
       char tmpModell[253];
       fscanf(fileCommands, "%[^\n]", tmpModell);
       char* modell;
       strtol(tmpModell, &modell, 3);
 
-      sett_modell(id, modell);
+      sett_modell(kommandoId, modell);
     }
-
-    if(strcmp("legg_til_kobling", command) == 0){
-      char tmpId1[1];
-      fscanf(fileCommands, "%s", tmpId1);
-      id = strtol(tmpId1, NULL, 10);
-
+    //HVIS DEN VIL LEGGE TIL KOBLING
+    else if(strcmp("legg_til_kobling", command) == 0){
       char tmpId2[1];
       fscanf(fileCommands, "%s", tmpId2);
-      id2 = strtol(tmpId2, NULL, 10);
+      kommandoId2 = strtol(tmpId2, NULL, 10);
 
-      legg_til_kobling(id, id2);
+      legg_til_kobling(kommandoId, kommandoId2);
     }
-
-    if(strcmp("slett_router", command) == 0){
-      char tmpId1[1];
-      fscanf(fileCommands, "%s", tmpId1);
-      id = strtol(tmpId1, NULL, 10);
-
-      slett_ruter(id);
+    //HVIS DEN VIL SLETTE EN RUTER
+    else if(strcmp("slett_router", command) == 0){
+      slett_ruter(kommandoId);
     }
-
-    if(strcmp("finnes_rute", command) == 0){
-      char tmpId1[1];
-      fscanf(fileCommands, "%s", tmpId1);
-      id = strtol(tmpId1, NULL, 10);
-
+    //HVIS DEN VIL FINNE EN RUTE MELLOM RUTERE
+    else if(strcmp("finnes_rute", command) == 0){
       char tmpId2[1];
       fscanf(fileCommands, "%s", tmpId2);
-      id2 = strtol(tmpId2, NULL, 10);
+      kommandoId2 = strtol(tmpId2, NULL, 10);
 
-      for (int i = 0; i < N; i++){
+      int i;
+      for (i = 0; i < N; i++){
         alleRutere[i] -> visited = 0;
       }
-      finnes_rute(id);
 
-      // if(alleRutere[id2] -> visited == 1){
-      //   printf("Rute mellom rute: %d og rute: %d finnes.\n", id, id2);
-      // }else{
-      //   printf("Fant ikke rute mellom: %d og %d\n", id, id2);
-      // }
+      finnes_rute(kommandoId);
+/*Koden som forteller om den fant rute mellom rutere eller ikke
+      if(alleRutere[id2] -> visited == 1){
+        printf("Rute mellom rute: %d og rute: %d finnes.\n", id, id2);
+      }else{
+        printf("Fant ikke rute mellom: %d og %d\n", id, id2);
+      }
+*/
     }
   }
 
-  skrivTilFil();
+  //Skriver til filen igjen med oppdatert info
+  skrivTilFil(argv[1]);
+  //Lukker filen med alle kommandoene
   fclose(fileCommands);
-  fclose(fileInfo);
 
+  /*Her free'er jeg alt minne som er blitt allokert.
+  Først free'er jeg hver enkelt ruter, med for løkke.
+  For så å etter free dobbelt pekkeren jeg hadde som holdt oversikt*/
   for (int i = 0; i < N; i++) {
     free(alleRutere[i]);
   }
@@ -221,6 +200,7 @@ void number_of_ruters(){
 //Denne funksjonen skriver alle ruterene til egne structer fra fil.
 void writeRuters(){
   int teller = 0;
+
   while(teller < N){
 
     struct ruter* rute = malloc(sizeof(struct ruter));
@@ -261,17 +241,17 @@ void writeRuters(){
 void connectRuters(){
   while(fgets(tmpBuffer, 255, fileInfo) != NULL){
 
-    char buffer3[3];
+    char buffer3[3]; //Buffer som leser inn kobling linjene i slutten av filen
     size_t read4 = fread(buffer3,2, 1, fileInfo);
     if(read4 != 0){
       // printf("Ruter %d -> Ruter %d\n",buffer3[0], buffer3[1]);
 
-      int id1 = buffer3[0];
-      int id2 = buffer3[1];
-      int n = alleRutere[id1] -> number_of_children;
+      int ruteId1 = buffer3[0];
+      int ruteId2 = buffer3[1];
+      int antKoblinger = alleRutere[id1] -> number_of_children;
 
-      alleRutere[id1] -> koblinger[n] = alleRutere[id2];
-      alleRutere[id1] -> number_of_children++;
+      alleRutere[ruteId1] -> koblinger[antKoblinger] = alleRutere[ruteId2];
+      alleRutere[ruteId1] -> number_of_children++;
     }
   }
 }
@@ -335,6 +315,7 @@ void sett_modell(int id, char* name){
   for (size_t i = 0; i < strlen(name); i++){
     alleRutere[id] -> modell[i] = name[i+1];
   }
+  alleRutere[id] -> length = strlen(name);
 }
 //------------------------------------------------------------------------------
 
@@ -418,8 +399,8 @@ void finnes_rute(int finnvei){
 
 //---------------------------------SKRIVER TIL FIL---------------------------
 //Skriver all info om hver rute til en fil leselig (ikke byte)
-void skrivTilFil(){
-  FILE *fileSkriv = fopen("ruterB", "w+");
+void skrivTilFil(char* name){
+  FILE *fileSkriv = freopen(name, "w+", fileInfo);
   if (fileSkriv == NULL) {
     printf("Fant ikke fil\n");
     exit(EXIT_FAILURE);
