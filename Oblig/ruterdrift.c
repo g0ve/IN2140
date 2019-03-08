@@ -426,21 +426,45 @@ void finnes_rute(int finnvei){
 //---------------------------------SKRIVER TIL FIL---------------------------
 //Skriver all info om hver rute til en fil leselig (ikke byte)
 void skrivTilFil(){
-  FILE *fileSkriv = fopen("ruter", "w+");
+  FILE *fileSkriv = fopen("ruterB", "w+");
   if (fileSkriv == NULL) {
     printf("Fant ikke fil\n");
     exit(EXIT_FAILURE);
   };
 
+  fwrite(&N, 1, 4, fileSkriv);
+  fwrite("\n", sizeof(char), 1, fileSkriv);
+
   int skriver = 0;
   while (skriver < N) {
+    int navnLen = alleRutere[skriver] -> length;
+
+    fwrite(alleRutere[skriver], 3 + navnLen, 1, fileSkriv);
+    fwrite("\n", sizeof(char), 1, fileSkriv);
+
+  /*Koden som er kommentert ut under er koden som skriver til filen med data som er
+  lesbart
     fprintf(fileSkriv, "\n%d %u %d %s",
     alleRutere[skriver] -> ruterID,
     alleRutere[skriver] -> FLAGG,
     alleRutere[skriver] -> length,
     alleRutere[skriver] -> modell);
+  */
 
     skriver++;
+  }
+
+  int e;
+  for (e = 0; e < N; e++) {
+    int i;
+    for (i = 0; i < alleRutere[e]->number_of_children; i++) {
+      char bufferKobling[2];
+      bufferKobling[0] = alleRutere[e]->ruterID;
+      bufferKobling[1] = alleRutere[e]->koblinger[i]->ruterID;
+
+      fwrite(bufferKobling, sizeof(bufferKobling), 1, fileSkriv);
+      fwrite("\n", sizeof(char), 1, fileSkriv);
+    }
   }
   fclose(fileSkriv);
 }
