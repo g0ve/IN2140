@@ -368,7 +368,7 @@ int main(int argc, char **argv){
     printf("%d\n", kommandoId);
     //---------------------------------------------------------------------------------------------
     //HVIS DEN VIL PRINTE
-    if (strcmp(command, "print") == 0) {
+    if (strncmp(command, "print", 1) == 0) {
       printf("HELLO2\n");
       printRuter(kommandoId);
     }
