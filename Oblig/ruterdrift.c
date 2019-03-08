@@ -92,17 +92,25 @@ Det blir så sendt med videre til en egen funksjon som gjør oppgaven kommandoen
 
     /*Avsnittet under bruker jeg i alle if setningene bare at alle henter ulik info,
     og tilslutt sender det til funksjonen*/
-    char tmpId1[1]; //Buffer for å legge inn id som kommer etter kommandoen
-    fscanf(fileCommands, "%s", tmpId1); //Leser inn rute-ID fra linja som alle har
-    kommandoId = strtol(tmpId1, NULL, 10); //Gjør den om til int (kunne sikkert brukt vanlig casting menmen)
+    // char tmpId1[1]; //Buffer for å legge inn id som kommer etter kommandoen
+    // fscanf(fileCommands, "%s", tmpId1); //Leser inn rute-ID fra linja som alle har
+    // kommandoId = strtol(tmpId1, NULL, 10); //Gjør den om til int (kunne sikkert brukt vanlig casting menmen)
 
     //HVIS DEN VIL PRINTE
     if (strcmp("print", command) == 0) {
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      kommandoId = strtol(tmpId1, NULL, 10);
+
       printRuter(kommandoId);
     }
 
     //HVIS DEN VIL ENDRE FLAGG
     else if(strcmp("sett_flag", command) == 0){
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      kommandoId = strtol(tmpId1, NULL, 10);
+
       char tmpFlaggId[1];
       fscanf(fileCommands, "%s", tmpFlaggId);
       kommandoFlaggId = strtol(tmpFlaggId, NULL, 10);
@@ -115,6 +123,10 @@ Det blir så sendt med videre til en egen funksjon som gjør oppgaven kommandoen
     }
     //HVIS DEN VIL ENDRE NAVN PÅ MODELL
     else if(strcmp("sett_modell", command) == 0){
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      kommandoId = strtol(tmpId1, NULL, 10);
+
       char tmpModell[253];
       fscanf(fileCommands, "%[^\n]", tmpModell);
       char* modell;
@@ -124,6 +136,10 @@ Det blir så sendt med videre til en egen funksjon som gjør oppgaven kommandoen
     }
     //HVIS DEN VIL LEGGE TIL KOBLING
     else if(strcmp("legg_til_kobling", command) == 0){
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      kommandoId = strtol(tmpId1, NULL, 10);
+
       char tmpId2[1];
       fscanf(fileCommands, "%s", tmpId2);
       kommandoId2 = strtol(tmpId2, NULL, 10);
@@ -132,10 +148,18 @@ Det blir så sendt med videre til en egen funksjon som gjør oppgaven kommandoen
     }
     //HVIS DEN VIL SLETTE EN RUTER
     else if(strcmp("slett_router", command) == 0){
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      kommandoId = strtol(tmpId1, NULL, 10);
+
       slett_ruter(kommandoId);
     }
     //HVIS DEN VIL FINNE EN RUTE MELLOM RUTERE
     else if(strcmp("finnes_rute", command) == 0){
+      char tmpId1[1];
+      fscanf(fileCommands, "%s", tmpId1);
+      kommandoId = strtol(tmpId1, NULL, 10);
+
       char tmpId2[1];
       fscanf(fileCommands, "%s", tmpId2);
       kommandoId2 = strtol(tmpId2, NULL, 10);
@@ -443,3 +467,4 @@ void skrivTilFil(char* name){
   fclose(fileSkriv);
 }
 //---------------------------------------------------------------------------
+
