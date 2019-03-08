@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -g
+CFLAGS = -Wall -Werror -Wpedantic -std=c99 -g
 
 BINARIES = ruterdrift
 
