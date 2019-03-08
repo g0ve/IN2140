@@ -248,7 +248,7 @@ void connectRuters(){
 
       int ruteId1 = buffer3[0];
       int ruteId2 = buffer3[1];
-      int antKoblinger = alleRutere[id1] -> number_of_children;
+      int antKoblinger = alleRutere[ruteId1] -> number_of_children;
 
       alleRutere[ruteId1] -> koblinger[antKoblinger] = alleRutere[ruteId2];
       alleRutere[ruteId1] -> number_of_children++;
